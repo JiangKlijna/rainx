@@ -22,3 +22,11 @@ target/
 
 # Test binary, build with `go test -c`
 *.test
+
+#### rainx
+# setting file
+setting.json
+# executable file
+rainx*
+# default html dir
+html/
