@@ -32,3 +32,28 @@ const indexHtml = `<!DOCTYPE html>
 </body>
 </html>
 `
+
+// Setting Interface
+type Setting interface {
+	isValid() error
+	servers() []ServerSetting
+}
+
+// Server Setting Interface
+type ServerSetting interface {
+	listen() string
+	locations() []LocationSetting
+}
+
+// Location Setting Interface
+// Get detailed configuration
+type LocationSetting interface {
+	pattern() string
+	isRoot() bool
+	root() string
+	isProxy() bool
+	proxy() string
+	isProxies() bool
+	proxies() []string
+	mode() string
+}
