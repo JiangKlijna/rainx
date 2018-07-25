@@ -1,7 +1,10 @@
 package main
 
 import (
+	"os"
 	"errors"
+	"io/ioutil"
+	"encoding/json"
 )
 
 const defaultJson = `{
@@ -115,4 +118,30 @@ func (s *rainxSetting) isValid() error {
 		}
 	}
 	return nil
+}
+
+// Get all of Server
+func (s *rainxSetting) servers() []ServerSetting {
+	return nil
+}
+
+// New creates a new Setting
+func NewSetting(filename string) (Setting, error) {
+	var bytes []byte
+	var err error
+	if !FileExists(filename) {
+		bytes = []byte(defaultJson)
+		ioutil.WriteFile(filename, bytes, os.ModePerm)
+	} else {
+		bytes, err = ioutil.ReadFile(filename)
+		if err != nil {
+			return nil, err
+		}
+	}
+	data := make(map[string]map[string]interface{})
+	err = json.Unmarshal(bytes, &data)
+	if err != nil {
+		return nil, err
+	}
+	return &rainxSetting{data}, nil
 }
