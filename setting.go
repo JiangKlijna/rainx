@@ -1,5 +1,9 @@
 package main
 
+import (
+	"errors"
+)
+
 const defaultJson = `{
 	"server0": {
 		"listen": "127.0.0.1:80",
@@ -56,4 +60,59 @@ type LocationSetting interface {
 	isProxies() bool
 	proxies() []string
 	mode() string
+}
+
+// Rainx Setting Implement
+type rainxSetting struct {
+	data map[string]map[string]interface{}
+}
+
+// Determine if setting.json is valid
+func (s *rainxSetting) isValid() error {
+	for _, v := range s.data {
+		if _, is := v["listen"].(string); !is {
+			return errors.New("listen must be a string")
+		}
+		if location, is := v["location"].(map[string]map[string]interface{}); !is {
+			return errors.New("location must be a map<string, map<string, ?>>")
+		} else {
+			for _, loc := range location {
+				root, isRoot := loc["root"]
+				proxy, isProxy := loc["proxy"]
+				if !isRoot && !isProxy {
+					return errors.New("location is at least one root and proxy")
+				} else if isRoot {
+					if _, is := root.(string); !is {
+						return errors.New("root must be a string")
+					}
+				} else if isProxy {
+					switch proxy.(type) {
+					case string:
+						break
+					case map[string]interface{}:
+						proxies := proxy.(map[string]interface{})
+						if _, is := proxies["path"].([]string); !is {
+							return errors.New("path must be a string array")
+						}
+						if mode, is := proxies["mode"].(string); !is {
+							return errors.New("mode must be a string")
+						} else {
+							switch mode {
+							case "random":
+							case "iphash":
+							case "round":
+								break
+							default:
+								return errors.New("mode must be in [random, iphash, round]")
+							}
+						}
+						break
+					default:
+						return errors.New("proxy must be a string or map<string, ?>")
+					}
+				}
+			}
+		}
+	}
+	return nil
 }
