@@ -132,6 +132,7 @@ func NewSetting(filename string) (Setting, error) {
 	if !FileExists(filename) {
 		bytes = []byte(defaultJson)
 		ioutil.WriteFile(filename, bytes, os.ModePerm)
+		initHtml()
 	} else {
 		bytes, err = ioutil.ReadFile(filename)
 		if err != nil {
@@ -144,4 +145,15 @@ func NewSetting(filename string) (Setting, error) {
 		return nil, err
 	}
 	return &rainxSetting{data}, nil
+}
+
+// If the setting.json does not exist
+// Ignore errors
+func initHtml() {
+	if !DirExists("html") {
+		os.Mkdir("html", os.ModePerm)
+	}
+	if !FileExists("html/index.html") {
+		ioutil.WriteFile("html/index.html", []byte(indexHtml), os.ModePerm)
+	}
 }
