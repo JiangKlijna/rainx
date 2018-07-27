@@ -70,6 +70,11 @@ type rainxSetting struct {
 	data map[string]map[string]interface{}
 }
 
+// Rainx Server Setting Implement
+type rainxServerSetting struct {
+	data map[string]interface{}
+}
+
 // Determine if setting.json is valid
 func (s *rainxSetting) isValid() error {
 	for _, v := range s.data {
@@ -156,4 +161,14 @@ func initHtml() {
 	if !FileExists("html/index.html") {
 		ioutil.WriteFile("html/index.html", []byte(indexHtml), os.ModePerm)
 	}
+}
+
+// Get Addr
+func (s rainxServerSetting) listen() string {
+	return s.data["listen"].(string)
+}
+
+// Get All of Location
+func (s rainxServerSetting) locations() []LocationSetting {
+	return nil
 }
