@@ -48,6 +48,7 @@ type Setting interface {
 
 // Server Setting Interface
 type ServerSetting interface {
+	name() string
 	listen() string
 	locations() []LocationSetting
 }
@@ -72,6 +73,7 @@ type rainxSetting struct {
 
 // Rainx Server Setting Implement
 type rainxServerSetting struct {
+	key string
 	data map[string]interface{}
 }
 
@@ -127,6 +129,7 @@ func (s *rainxSetting) isValid() error {
 
 // Get all of Server
 func (s *rainxSetting) servers() []ServerSetting {
+
 	return nil
 }
 
@@ -161,6 +164,11 @@ func initHtml() {
 	if !FileExists("html/index.html") {
 		ioutil.WriteFile("html/index.html", []byte(indexHtml), os.ModePerm)
 	}
+}
+
+// Get Server Name
+func (s rainxServerSetting) name() string {
+	return s.key
 }
 
 // Get Addr
