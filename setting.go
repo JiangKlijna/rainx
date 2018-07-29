@@ -73,7 +73,7 @@ type rainxSetting struct {
 
 // Rainx Server Setting Implement
 type rainxServerSetting struct {
-	key string
+	key  string
 	data map[string]interface{}
 }
 
@@ -129,8 +129,13 @@ func (s *rainxSetting) isValid() error {
 
 // Get all of Server
 func (s *rainxSetting) servers() []ServerSetting {
-
-	return nil
+	i := 0
+	arr := make([]ServerSetting, len(s.data))
+	for k, v := range s.data {
+		arr[i] = &rainxServerSetting{k, v}
+		i++
+	}
+	return arr
 }
 
 // New creates a new Setting
