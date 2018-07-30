@@ -42,28 +42,28 @@ const indexHtml = `<!DOCTYPE html>
 
 // Setting Interface
 type Setting interface {
-	isValid() error
-	servers() []ServerSetting
+	IsValid() error
+	Servers() []ServerSetting
 }
 
 // Server Setting Interface
 type ServerSetting interface {
-	name() string
-	listen() string
-	locations() []LocationSetting
+	Name() string
+	Listen() string
+	Locations() []LocationSetting
 }
 
 // Location Setting Interface
 // Get detailed configuration
 type LocationSetting interface {
-	pattern() string
-	isRoot() bool
-	root() string
-	isProxy() bool
-	proxy() string
-	isProxies() bool
-	proxies() []string
-	mode() string
+	Pattern() string
+	IsRoot() bool
+	Root() string
+	IsProxy() bool
+	Proxy() string
+	IsProxies() bool
+	Proxies() []string
+	Mode() string
 }
 
 // Rainx Setting Implement
@@ -78,7 +78,7 @@ type rainxServerSetting struct {
 }
 
 // Determine if setting.json is valid
-func (s *rainxSetting) isValid() error {
+func (s *rainxSetting) IsValid() error {
 	for _, v := range s.data {
 		if _, is := v["listen"].(string); !is {
 			return errors.New("listen must be a string")
@@ -128,7 +128,7 @@ func (s *rainxSetting) isValid() error {
 }
 
 // Get all of Server
-func (s *rainxSetting) servers() []ServerSetting {
+func (s *rainxSetting) Servers() []ServerSetting {
 	i := 0
 	arr := make([]ServerSetting, len(s.data))
 	for k, v := range s.data {
@@ -172,16 +172,16 @@ func initHtml() {
 }
 
 // Get Server Name
-func (s rainxServerSetting) name() string {
+func (s rainxServerSetting) Name() string {
 	return s.key
 }
 
 // Get Addr
-func (s rainxServerSetting) listen() string {
+func (s rainxServerSetting) Listen() string {
 	return s.data["listen"].(string)
 }
 
 // Get All of Location
-func (s rainxServerSetting) locations() []LocationSetting {
+func (s rainxServerSetting) Locations() []LocationSetting {
 	return nil
 }
