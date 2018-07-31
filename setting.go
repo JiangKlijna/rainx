@@ -77,6 +77,12 @@ type rainxServerSetting struct {
 	data map[string]interface{}
 }
 
+// Rainx Location Setting Implement
+type rainxLocatioSetting struct {
+	key  string
+	data map[string]interface{}
+}
+
 // Determine if setting.json is valid
 func (s *rainxSetting) IsValid() error {
 	for _, v := range s.data {
@@ -184,4 +190,53 @@ func (s rainxServerSetting) Listen() string {
 // Get All of Location
 func (s rainxServerSetting) Locations() []LocationSetting {
 	return nil
+}
+
+// Get Pattern of Location
+func (s *rainxLocatioSetting) Pattern() string {
+	return s.key
+}
+
+// Determine if the [root] is included
+func (s *rainxLocatioSetting) IsRoot() bool {
+	_, is := s.data["root"].(string)
+	return is
+}
+
+// Get [root] value
+func (s *rainxLocatioSetting) Root() string {
+	root, _ := s.data["root"].(string)
+	return root
+}
+
+// Determine if the [proxy] is included
+// Determine if the [proxy] is string
+func (s *rainxLocatioSetting) IsProxy() bool {
+	_, is := s.data["proxy"].(string)
+	return is
+}
+
+// Get [proxy] value
+func (s *rainxLocatioSetting) Proxy() string {
+	proxy, _ := s.data["proxy"].(string)
+	return proxy
+}
+
+// Determine if the [proxy] is included
+// Determine if the [proxy] is map<string, ?>
+func (s *rainxLocatioSetting) IsProxies() bool {
+	_, is := s.data["proxy"].(map[string]interface{})
+	return is
+}
+
+// Get [proxy.path] value
+func (s *rainxLocatioSetting) Proxies() []string {
+	proxies, _ := s.data["proxy"].(map[string]interface{})
+	return proxies["path"].([]string)
+}
+
+// Get [proxy.mode] value
+func (s *rainxLocatioSetting) Mode() string {
+	proxies, _ := s.data["proxy"].(map[string]interface{})
+	return proxies["mode"].(string)
 }
