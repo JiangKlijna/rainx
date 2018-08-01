@@ -189,7 +189,13 @@ func (s rainxServerSetting) Listen() string {
 
 // Get All of Location
 func (s rainxServerSetting) Locations() []LocationSetting {
-	return nil
+	i := 0
+	arr := make([]LocationSetting, len(s.data))
+	for k, v := range s.data {
+		arr[i] = &rainxLocatioSetting{k, v.(map[string]interface{})}
+		i++
+	}
+	return arr
 }
 
 // Get Pattern of Location
