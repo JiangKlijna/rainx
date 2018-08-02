@@ -5,6 +5,7 @@ import (
 	"errors"
 	"io/ioutil"
 	"encoding/json"
+	"fmt"
 )
 
 const defaultJson = `{
@@ -89,10 +90,14 @@ func (s *rainxSetting) IsValid() error {
 		if _, is := v["listen"].(string); !is {
 			return errors.New("listen must be a string")
 		}
-		if location, is := v["location"].(map[string]map[string]interface{}); !is {
-			return errors.New("location must be a map<string, map<string, ?>>")
+		if location, is := v["location"].(map[string]interface{}); !is {
+			return errors.New("location must be a map<string, ?>")
 		} else {
-			for _, loc := range location {
+			for _, loc_v := range location {
+				var loc map[string]interface{}
+				if loc, is = loc_v.(map[string]interface{}); !is {
+					return errors.New("location must be a map<string, map<string, ?>>")
+				}
 				root, isRoot := loc["root"]
 				proxy, isProxy := loc["proxy"]
 				if !isRoot && !isProxy {
@@ -113,6 +118,7 @@ func (s *rainxSetting) IsValid() error {
 						if mode, is := proxies["mode"].(string); !is {
 							return errors.New("mode must be a string")
 						} else {
+							fmt.Println(mode)
 							switch mode {
 							case "random":
 							case "iphash":
@@ -128,6 +134,7 @@ func (s *rainxSetting) IsValid() error {
 					}
 				}
 			}
+
 		}
 	}
 	return nil
