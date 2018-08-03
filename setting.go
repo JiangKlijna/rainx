@@ -112,8 +112,14 @@ func (s *rainxSetting) IsValid() error {
 						break
 					case map[string]interface{}:
 						proxies := proxy.(map[string]interface{})
-						if _, is := proxies["path"].([]string); !is {
-							return errors.New("path must be a string array")
+						if path, is := proxies["path"].([]interface{}); !is {
+							return errors.New("path must be a array")
+						} else {
+							for _, p := range path  {
+								if _, is := p.(string); !is {
+									return errors.New("path must be a string array")
+								}
+							}
 						}
 						if mode, is := proxies["mode"].(string); !is {
 							return errors.New("mode must be a string")
