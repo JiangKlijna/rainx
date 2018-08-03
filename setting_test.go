@@ -9,4 +9,9 @@ func TestNewSetting(t *testing.T) {
 		return
 	}
 	t.Log(setting)
+	err = setting.IsValid()
+	if err != nil {
+		t.Error(err)
+		return
+	}
 }
