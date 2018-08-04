@@ -14,4 +14,10 @@ func TestNewSetting(t *testing.T) {
 		t.Error(err)
 		return
 	}
+	for _, s := range setting.Servers() {
+		t.Log(s.Listen())
+		for _, l := range s.Locations() {
+			t.Log(l)
+		}
+	}
 }
