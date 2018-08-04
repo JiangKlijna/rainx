@@ -5,8 +5,7 @@ import (
 	"errors"
 	"io/ioutil"
 	"encoding/json"
-	"fmt"
-)
+	)
 
 const defaultJson = `{
 	"server0": {
@@ -124,7 +123,6 @@ func (s *rainxSetting) IsValid() error {
 						if mode, is := proxies["mode"].(string); !is {
 							return errors.New("mode must be a string")
 						} else {
-							fmt.Println(mode)
 							switch mode {
 							case "random":
 							case "iphash":
@@ -203,8 +201,9 @@ func (s rainxServerSetting) Listen() string {
 // Get All of Location
 func (s rainxServerSetting) Locations() []LocationSetting {
 	i := 0
-	arr := make([]LocationSetting, len(s.data))
-	for k, v := range s.data {
+	locations := s.data["location"].(map[string]interface{})
+	arr := make([]LocationSetting, len(locations))
+	for k, v := range locations {
 		arr[i] = &rainxLocatioSetting{k, v.(map[string]interface{})}
 		i++
 	}
