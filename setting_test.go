@@ -17,7 +17,15 @@ func TestNewSetting(t *testing.T) {
 	for _, s := range setting.Servers() {
 		t.Log(s.Listen())
 		for _, l := range s.Locations() {
-			t.Log(l)
+			if l.IsRoot() {
+				t.Log(l.Root())
+			} else if l.IsProxy() {
+				t.Log(l.Proxy())
+			} else if l.IsProxies() {
+				t.Log(l.Proxies(), l.Mode())
+			} else {
+				t.Error(l)
+			}
 		}
 	}
 }
