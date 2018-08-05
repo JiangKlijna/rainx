@@ -250,7 +250,12 @@ func (s *rainxLocatioSetting) IsProxies() bool {
 // Get [proxy.path] value
 func (s *rainxLocatioSetting) Proxies() []string {
 	proxies, _ := s.data["proxy"].(map[string]interface{})
-	return proxies["path"].([]string)
+	path := proxies["path"].([]interface{})
+	arr := make([]string, len(path))
+	for i, p := range path {
+		arr[i] = p.(string)
+	}
+	return arr
 }
 
 // Get [proxy.mode] value
