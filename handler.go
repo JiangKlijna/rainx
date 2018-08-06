@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+	"time"
 	"net/url"
 	"net/http"
 	"math/rand"
@@ -44,5 +46,20 @@ func RoundHandler(hs []http.Handler) http.Handler {
 		}
 		hs[i].ServeHTTP(w, r)
 		i++
+	})
+}
+
+// logging
+func LoggingHandler(print func(v ...interface{}), next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		start := time.Now()
+		next.ServeHTTP(w, r)
+		str := fmt.Sprintf("%s Comleted %s %s in %v from %s\n",
+			start.Format("2006-01-02 15:04:05"),
+			r.Method,
+			r.URL.Path,
+			time.Since(start),
+			r.RemoteAddr)
+		go print(str)
 	})
 }
