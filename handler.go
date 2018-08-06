@@ -33,3 +33,16 @@ func RandomHandler(hs []http.Handler) http.Handler {
 		hs[rand.Intn(n)].ServeHTTP(w, r)
 	})
 }
+
+// round
+func RoundHandler(hs []http.Handler) http.Handler {
+	n := len(hs)
+	i := 0
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if i == n {
+			i = 0
+		}
+		hs[i].ServeHTTP(w, r)
+		i++
+	})
+}
