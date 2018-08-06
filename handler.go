@@ -3,6 +3,7 @@ package main
 import (
 	"net/url"
 	"net/http"
+	"math/rand"
 	"net/http/httputil"
 )
 
@@ -22,5 +23,13 @@ func IphashHandlerh(hs []http.Handler) http.Handler {
 	n := uint32(len(hs))
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		hs[IphashByAddress(r.RemoteAddr)%n].ServeHTTP(w, r)
+	})
+}
+
+// random
+func RandomHandler(hs []http.Handler) http.Handler {
+	n := len(hs)
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		hs[rand.Intn(n)].ServeHTTP(w, r)
 	})
 }
