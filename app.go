@@ -29,7 +29,7 @@ func (app *Application) Init() error {
 	app.setting = set
 	servers := set.Servers()
 	app.servers = make([]*http.Server, len(servers))
-	for i, s := range servers  {
+	for i, s := range servers {
 		app.servers[i] = app.setting2http(s)
 	}
 	return nil
@@ -40,6 +40,14 @@ func (app *Application) setting2http(s ServerSetting) *http.Server {
 	return nil
 }
 
+// check error and exit
+func (app *Application) check(err error) {
+	if err != nil {
+		println(err)
+		os.Exit(1)
+	}
+}
+
 // Start all of server
 func (app *Application) Start() {
 }
@@ -47,10 +55,6 @@ func (app *Application) Start() {
 func main() {
 	app := &Application{}
 	err := app.Init()
-	if err != nil {
-		println(err)
-		os.Exit(1)
-	}
+	app.check(err)
 	app.Start()
 }
-
