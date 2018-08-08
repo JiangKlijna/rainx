@@ -1,5 +1,7 @@
 package main
 
+import "os"
+
 type Application struct {
 	log Logger
 	set Setting
@@ -18,4 +20,18 @@ func (app *Application) Init() error {
 	}
 	app.set = set
 	return nil
+}
+
+// Start all of server
+func (app *Application) Start() {
+}
+
+func main() {
+	app := &Application{}
+	err := app.Init()
+	if err != nil {
+		println(err)
+		os.Exit(1)
+	}
+	app.Start()
 }
