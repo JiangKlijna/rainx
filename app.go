@@ -8,7 +8,7 @@ import (
 type Application struct {
 	logger  Logger
 	setting Setting
-	servers []http.Server
+	servers []*http.Server
 }
 
 // Init log & set
@@ -27,6 +27,16 @@ func (app *Application) Init() error {
 		return err
 	}
 	app.setting = set
+	servers := set.Servers()
+	app.servers = make([]*http.Server, len(servers))
+	for i, s := range servers  {
+		app.servers[i] = app.setting2http(s)
+	}
+	return nil
+}
+
+// setting server to http server
+func (app *Application) setting2http(s ServerSetting) *http.Server {
 	return nil
 }
 
@@ -43,3 +53,4 @@ func main() {
 	}
 	app.Start()
 }
+
