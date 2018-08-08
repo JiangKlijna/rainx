@@ -1,10 +1,14 @@
 package main
 
-import "os"
+import (
+	"os"
+	"net/http"
+)
 
 type Application struct {
-	log Logger
-	set Setting
+	logger  Logger
+	setting Setting
+	servers []http.Server
 }
 
 // Init log & set
@@ -13,12 +17,16 @@ func (app *Application) Init() error {
 	if err != nil {
 		return err
 	}
-	app.log = log
+	app.logger = log
 	set, err := NewSetting("setting.json")
 	if err != nil {
 		return err
 	}
-	app.set = set
+	err = set.IsValid()
+	if err != nil {
+		return err
+	}
+	app.setting = set
 	return nil
 }
 
