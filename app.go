@@ -37,6 +37,15 @@ func (app *Application) Init() error {
 
 // setting server to http server
 func (app *Application) setting2http(s ServerSetting) *http.Server {
+	mux := http.NewServeMux()
+	for _, l := range s.Locations() {
+		mux.Handle(l.Pattern(), app.location2handler(l))
+	}
+	return &http.Server{Addr: s.Listen(), Handler: mux}
+}
+
+// setting location to http handler
+func (app *Application) location2handler(l LocationSetting) http.Handler {
 	return nil
 }
 
