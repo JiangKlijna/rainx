@@ -59,6 +59,10 @@ func (app *Application) check(err error) {
 
 // Start all of server
 func (app *Application) Start() {
+	for _, s := range app.servers  {
+		err := s.ListenAndServe()
+		app.check(err)
+	}
 }
 
 func main() {
