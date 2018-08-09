@@ -46,6 +46,29 @@ func (app *Application) setting2http(s ServerSetting) *http.Server {
 
 // setting location to http handler
 func (app *Application) location2handler(l LocationSetting) http.Handler {
+	if l.IsRoot() {
+		return StaticHandler(l.Root())
+	} else if l.IsProxy() {
+		return ProxyHandler(l.Proxy())
+	} else if l.IsProxies() {
+		proxies := l.Proxies()
+		if len(proxies) == 1 {
+			return ProxyHandler(proxies[0])
+		} else {
+			hs := ProxiesHandler(proxies)
+			switch l.Mode() {
+			case "round":
+				return RoundHandler(hs)
+				break
+			case "random":
+				return RandomHandler(hs)
+				break
+			case "iphash":
+				return IphashHandler(hs)
+				break
+			}
+		}
+	}
 	return nil
 }
 
@@ -59,7 +82,7 @@ func (app *Application) check(err error) {
 
 // Start all of server
 func (app *Application) Start() {
-	for _, s := range app.servers  {
+	for _, s := range app.servers {
 		err := s.ListenAndServe()
 		app.check(err)
 	}
@@ -67,7 +90,7 @@ func (app *Application) Start() {
 
 // Stop all of server
 func (app *Application) Stop() {
-	for _, s := range app.servers  {
+	for _, s := range app.servers {
 		s.Close()
 	}
 }

@@ -20,8 +20,13 @@ func ProxyHandler(path string) http.Handler {
 	return httputil.NewSingleHostReverseProxy(targetUrl)
 }
 
+// proxy array
+func ProxiesHandler(path []string) []http.Handler {
+	return nil
+}
+
 // iphash
-func IphashHandlerh(hs []http.Handler) http.Handler {
+func IphashHandler(hs []http.Handler) http.Handler {
 	n := uint32(len(hs))
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		hs[IphashByAddress(r.RemoteAddr)%n].ServeHTTP(w, r)
