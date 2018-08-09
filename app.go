@@ -65,6 +65,13 @@ func (app *Application) Start() {
 	}
 }
 
+// Stop all of server
+func (app *Application) Stop() {
+	for _, s := range app.servers  {
+		s.Close()
+	}
+}
+
 func main() {
 	app := &Application{}
 	err := app.Init()
