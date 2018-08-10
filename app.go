@@ -3,6 +3,7 @@ package main
 import (
 	"os"
 	"net/http"
+	"os/signal"
 )
 
 type Application struct {
@@ -83,6 +84,9 @@ func (app *Application) Start() {
 		err := s.ListenAndServe()
 		app.check(err)
 	}
+	c := make(chan os.Signal, 1)
+	signal.Notify(c, os.Interrupt, os.Kill)
+	_ <- c
 }
 
 // Stop all of server
@@ -97,4 +101,5 @@ func main() {
 	err := app.Init()
 	app.check(err)
 	app.Start()
+	app.Stop()
 }
