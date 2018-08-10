@@ -22,7 +22,11 @@ func ProxyHandler(path string) http.Handler {
 
 // proxy array
 func ProxiesHandler(path []string) []http.Handler {
-	return nil
+	hs := make([]http.Handler, len(path))
+	for i, s := range path  {
+		hs[i] = ProxyHandler(s)
+	}
+	return hs
 }
 
 // iphash

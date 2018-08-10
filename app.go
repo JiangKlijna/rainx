@@ -59,13 +59,10 @@ func (app *Application) location2handler(l LocationSetting) http.Handler {
 			switch l.Mode() {
 			case "round":
 				return RoundHandler(hs)
-				break
 			case "random":
 				return RandomHandler(hs)
-				break
 			case "iphash":
 				return IphashHandler(hs)
-				break
 			}
 		}
 	}
