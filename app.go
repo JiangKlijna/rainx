@@ -40,7 +40,8 @@ func (app *Application) Init() error {
 func (app *Application) setting2http(s ServerSetting) *http.Server {
 	mux := http.NewServeMux()
 	for _, l := range s.Locations() {
-		mux.Handle(l.Pattern(), app.location2handler(l))
+		h := app.location2handler(l)
+		mux.Handle(l.Pattern(), LoggingHandler(app.logger.Info, h))
 	}
 	return &http.Server{Addr: s.Listen(), Handler: mux}
 }
