@@ -81,12 +81,11 @@ func (app *Application) check(err error) {
 // Start all of server
 func (app *Application) Start() {
 	for _, s := range app.servers {
-		err := s.ListenAndServe()
-		app.check(err)
+		go s.ListenAndServe()
 	}
 	c := make(chan os.Signal, 1)
 	signal.Notify(c, os.Interrupt, os.Kill)
-	_ <- c
+	<- c
 }
 
 // Stop all of server
