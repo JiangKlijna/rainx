@@ -23,7 +23,7 @@ func ProxyHandler(path string) http.Handler {
 // proxy array
 func ProxiesHandler(path []string) []http.Handler {
 	hs := make([]http.Handler, len(path))
-	for i, s := range path  {
+	for i, s := range path {
 		hs[i] = ProxyHandler(s)
 	}
 	return hs
@@ -59,16 +59,12 @@ func RoundHandler(hs []http.Handler) http.Handler {
 }
 
 // logging
-func LoggingHandler(print func(v ...interface{}), next http.Handler) http.Handler {
+func LoggingHandler(tag string, print func(v ...interface{}), next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		start := time.Now()
 		next.ServeHTTP(w, r)
 		str := fmt.Sprintf("%s Comleted %s %s in %v from %s",
-			start.Format("2006-01-02 15:04:05"),
-			r.Method,
-			r.URL.Path,
-			time.Since(start),
-			r.RemoteAddr)
+			tag, r.Method, r.URL.Path, time.Since(start), r.RemoteAddr)
 		go print(str)
 	})
 }
