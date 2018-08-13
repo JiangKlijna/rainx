@@ -27,6 +27,7 @@ type Logger interface {
 	Info(v ...interface{})
 	Warning(v ...interface{})
 	Error(v ...interface{})
+	Print(v ...interface{})
 	Close()
 }
 
