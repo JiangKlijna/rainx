@@ -63,7 +63,8 @@ func LoggingHandler(tag string, print func(v ...interface{}), next http.Handler)
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		start := time.Now()
 		next.ServeHTTP(w, r)
-		str := fmt.Sprintf("%s Comleted %s %s in %v from %s",
+		str := fmt.Sprintf("%d-%d-%d %d:%d:%d [%s] Comleted %s %s in %v from %s",
+			start.Year(),start.Month(), start.Day(), start.Hour(), start.Minute(), start.Second(),
 			tag, r.Method, r.URL.Path, time.Since(start), r.RemoteAddr)
 		go print(str)
 	})
