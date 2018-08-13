@@ -94,6 +94,7 @@ func (app *Application) Stop() {
 	for _, s := range app.servers {
 		s.Close()
 	}
+	app.logger.Close()
 }
 
 func main() {
