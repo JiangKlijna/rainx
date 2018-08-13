@@ -8,7 +8,7 @@ import (
 )
 
 const (
-	L_DEBUG   = uint(iota)
+	L_DEBUG = uint(iota)
 	L_INFO
 	L_WARNING
 	L_ERROR
@@ -50,33 +50,40 @@ func NewLogger(filename string, level uint) (Logger, error) {
 	}, nil
 }
 
-// Print Debug Log
+// print Debug Log
 func (l *loggerImpl) Debug(v ...interface{}) {
-	l.Print(L_DEBUG, TAG_DEBUG, v...)
+	l.print(L_DEBUG, TAG_DEBUG, v...)
 }
 
-// Print Info Log
+// print Info Log
 func (l *loggerImpl) Info(v ...interface{}) {
-	l.Print(L_INFO, TAG_INFO, v...)
+	l.print(L_INFO, TAG_INFO, v...)
 }
 
-// Print Warning Log
+// print Warning Log
 func (l *loggerImpl) Warning(v ...interface{}) {
-	l.Print(L_WARNING, TAG_WARNING, v...)
+	l.print(L_WARNING, TAG_WARNING, v...)
 }
 
-// Print Error Log
+// print Error Log
 func (l *loggerImpl) Error(v ...interface{}) {
-	l.Print(L_ERROR, TAG_ERROR, v...)
+	l.print(L_ERROR, TAG_ERROR, v...)
 }
 
-// Print Log
-func (l *loggerImpl) Print(level uint, tag []byte, v ...interface{}) {
+// print Log
+func (l *loggerImpl) print(level uint, tag []byte, v ...interface{}) {
 	data := l.logData(tag, v...)
 	l.line.Write(data)
 	if l.level < level {
 		l.file.Write(data)
 	}
+}
+
+// customize print Log
+func (l *loggerImpl) Print(v ...interface{}) {
+	data := []byte(fmt.Sprintln(v...))
+	l.line.Write(data)
+	l.file.Write(data)
 }
 
 // return the log data
