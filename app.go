@@ -6,6 +6,8 @@ import (
 	"os/signal"
 )
 
+const Version = "rainx-0.9"
+
 type Application struct {
 	logger  Logger
 	setting Setting
@@ -86,7 +88,7 @@ func (app *Application) Start() {
 	}
 	c := make(chan os.Signal, 1)
 	signal.Notify(c, os.Interrupt, os.Kill)
-	<- c
+	<-c
 }
 
 // Stop all of server
