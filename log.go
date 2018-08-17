@@ -27,7 +27,7 @@ type Logger interface {
 	Info(v ...interface{})
 	Warning(v ...interface{})
 	Error(v ...interface{})
-	Print(v ...interface{})
+	PrintLog(v ...interface{})
 	Close()
 }
 
@@ -81,9 +81,9 @@ func (l *loggerImpl) print(level uint, tag []byte, v ...interface{}) {
 }
 
 // customize print Log
-func (l *loggerImpl) Print(v ...interface{}) {
+func (l *loggerImpl) PrintLog(v ...interface{}) {
 	data := []byte(fmt.Sprintln(v...))
-	l.line.Write(data)
+	//l.line.Write(data)
 	l.file.Write(data)
 }
 

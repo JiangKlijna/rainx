@@ -43,7 +43,7 @@ func (app *Application) setting2http(s ServerSetting) *http.Server {
 	mux := http.NewServeMux()
 	for _, l := range s.Locations() {
 		h := app.location2handler(l)
-		mux.Handle(l.Pattern(), LoggingHandler(s.Name(), app.logger.Print, h))
+		mux.Handle(l.Pattern(), LoggingHandler(s.Name(), app.logger.PrintLog, h))
 	}
 	return &http.Server{Addr: s.Listen(), Handler: mux}
 }
