@@ -23,11 +23,12 @@ var (
 
 // Simple Logger Interface
 type Logger interface {
-	Debug(v ...interface{})
-	Info(v ...interface{})
-	Warning(v ...interface{})
-	Error(v ...interface{})
-	PrintLog(v ...interface{})
+	Debug(...interface{})
+	Info(...interface{})
+	Warning(...interface{})
+	Error(...interface{})
+	PrintLog(...interface{})
+	Printf(string, ...interface{})
 	Close()
 }
 
@@ -83,6 +84,13 @@ func (l *loggerImpl) print(level uint, tag []byte, v ...interface{}) {
 // customize print Log
 func (l *loggerImpl) PrintLog(v ...interface{}) {
 	data := []byte(fmt.Sprintln(v...))
+	//l.line.Write(data)
+	l.file.Write(data)
+}
+
+// format print
+func (l *loggerImpl) Printf(format string, v ...interface{}) {
+	data := []byte(fmt.Sprintf(format, v...))
 	//l.line.Write(data)
 	l.file.Write(data)
 }
