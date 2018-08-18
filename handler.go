@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"time"
 	"net/url"
 	"net/http"
@@ -59,14 +58,13 @@ func RoundHandler(hs []http.Handler) http.Handler {
 }
 
 // logging
-func LoggingHandler(tag string, print func(v ...interface{}), next http.Handler) http.Handler {
+func LoggingHandler(tag string, printf func(string, ...interface{}), next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		start := time.Now()
 		w.Header().Add("Server", Version)
 		next.ServeHTTP(w, r)
-		log := fmt.Sprintf("%d-%d-%d %d:%d:%d [%s] Comleted %s %s in %v from %s",
+		go printf("%d-%d-%d %d:%d:%d [%s] Comleted %s %s in %v from %s\n",
 			start.Year(), start.Month(), start.Day(), start.Hour(), start.Minute(), start.Second(),
 			tag, r.Method, r.URL.Path, time.Since(start), r.RemoteAddr)
-		go print(log)
 	})
 }
