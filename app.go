@@ -76,7 +76,7 @@ func (app *Application) location2handler(l LocationSetting) http.Handler {
 // check error and exit
 func (app *Application) check(err error) {
 	if err != nil {
-		println(err)
+		println(err.Error())
 		os.Exit(1)
 	}
 }
@@ -86,8 +86,7 @@ func (app *Application) Start() {
 	for _, s := range app.servers {
 		go func() {
 			err := s.ListenAndServe()
-			println(err.Error())
-			os.Exit(1)
+			app.check(err)
 		}()
 	}
 	c := make(chan os.Signal, 1)
