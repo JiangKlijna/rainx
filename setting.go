@@ -40,6 +40,8 @@ const indexHtml = `<!DOCTYPE html>
 </html>
 `
 
+const filemode = os.FileMode(660)
+
 // Setting Interface
 type Setting interface {
 	IsValid() error
@@ -161,7 +163,7 @@ func NewSetting(filename string) (Setting, error) {
 	var err error
 	if !FileExists(filename) {
 		bytes = []byte(defaultJson)
-		ioutil.WriteFile(filename, bytes, os.ModePerm)
+		ioutil.WriteFile(filename, bytes, filemode)
 		initHtml()
 	} else {
 		bytes, err = ioutil.ReadFile(filename)
@@ -181,10 +183,10 @@ func NewSetting(filename string) (Setting, error) {
 // Ignore errors
 func initHtml() {
 	if !DirExists("html") {
-		os.Mkdir("html", os.ModePerm)
+		os.Mkdir("html", filemode)
 	}
 	if !FileExists("html/index.html") {
-		ioutil.WriteFile("html/index.html", []byte(indexHtml), os.ModePerm)
+		ioutil.WriteFile("html/index.html", []byte(indexHtml), filemode)
 	}
 }
 
