@@ -41,7 +41,7 @@ type loggerImpl struct {
 
 // New creates a new Logger
 func NewLogger(filename string, level uint) (Logger, error) {
-	f, err := os.OpenFile(filename, os.O_CREATE|os.O_WRONLY|os.O_APPEND, os.ModePerm)
+	f, err := os.OpenFile(filename, os.O_CREATE|os.O_WRONLY|os.O_APPEND, os.FileMode(660))
 	if err != nil {
 		return nil, err
 	}
