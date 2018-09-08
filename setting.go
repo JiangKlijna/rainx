@@ -22,7 +22,7 @@ const defaultJson = `{
 		}
 	},
     "server1": {
-        "listen": "9090",
+        "listen": ":9090",
         "location": {
             "/": {"root": "html"}
         }
